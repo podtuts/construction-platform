@@ -7,7 +7,7 @@ import {
   Building2,
   MapPin,
   CalendarDays,
-  Wallet,
+  TrendingUp,
   Upload,
   X,
   Image as ImageIcon
@@ -62,9 +62,6 @@ const presetImages = [
   { label: 'Commercial', url: 'https://images.unsplash.com/photo-1550864231728-9371c49eded1?w=800&auto=format&fit=crop&q=80' },
   { label: 'Manufacturing', url: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&auto=format&fit=crop&q=80' }
 ];
-
-const formatMoney = (value: number) =>
-  Number.isNaN(value) ? '₱ 0' : `₱ ${value.toLocaleString('en-US')}`;
 
 interface ProjectsViewProps {
   projects: Project[];
@@ -509,7 +506,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ projects, onRefresh 
         <div>
           <h2 className="text-[20px] font-medium text-white tracking-tight">Site Projects</h2>
           <p className="text-[13px] text-[#8D93A1] mt-0.5">
-            Manage construction site projects, photographs, budgets, and all project information
+            Manage construction site projects, photographs, and all project information
           </p>
         </div>
 
@@ -568,9 +565,9 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ projects, onRefresh 
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
           {filteredProjects.map((p) => {
-            const budget = Number(p.budget) || 0;
-            const spent = Number(p.spent) || 0;
-            const spendPct = budget > 0 ? Math.min(100, Math.round((spent / budget) * 100)) : 0;
+            const totalUnits = Number(p.totalUnits) || 0;
+            const completedUnits = Number(p.completedUnits) || 0;
+            const completionPct = totalUnits > 0 ? Math.min(100, Math.round((completedUnits / totalUnits) * 100)) : 0;
 
             return (
               <div
@@ -634,40 +631,28 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({ projects, onRefresh 
                     <span>Target completion {p.targetCompletionDate || '—'}</span>
                   </div>
 
-                  {/* Budget / Spent Progress */}
+                  {/* Completion Progress */}
                   <div>
                     <div className="flex justify-between items-center mb-1.5 text-[11px]">
                       <span className="flex items-center space-x-1.5 text-[#8D93A1]">
-                        <Wallet className="w-3 h-3 text-[#626875]" />
-                        <span>Budget</span>
+                        <TrendingUp className="w-3 h-3 text-[#626875]" />
+                        <span>Completion</span>
                       </span>
                       <span className="text-[#BAC2D1] font-mono font-medium">
-                        {formatMoney(spent)} <span className="text-[#626875]">/</span> {formatMoney(budget)}
+                        {completionPct}% <span className="text-[#626875]">({completedUnits} / {totalUnits} units)</span>
                       </span>
                     </div>
                     <div className="h-1.5 rounded-full bg-[#2A2E38] overflow-hidden">
                       <div
-                        className={`h-full ${spendPct >= 100 ? 'bg-[#FC424A]' : 'bg-[#0090FF]'}`}
-                        style={{ width: `${spendPct}%` }}
+                        className={`h-full ${completionPct >= 100 ? 'bg-[#00C853]' : 'bg-[#0090FF]'}`}
+                        style={{ width: `${completionPct}%` }}
                       />
                     </div>
                   </div>
 
                   {/* Units Summary */}
-                  <div className="flex items-center justify-between text-[11px] text-[#8D93A1]">
-                    <span>
-                      Units: {p.totalUnits > 0 ? `${p.completedUnits} / ${p.totalUnits} completed` : '0 registered yet'}
-                    </span>
-                    {p.siteMapUrl && (
-                      <a
-                        href={p.siteMapUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center text-[11px] text-[#0090FF] hover:text-white transition-colors"
-                      >
-                        Site Map
-                      </a>
-                    )}
+                  <div className="text-[11px] text-[#8D93A1]">
+                    Units: {totalUnits > 0 ? `${completedUnits} / ${totalUnits} completed` : '0 registered yet'}
                   </div>
 
                   {p.description && (
