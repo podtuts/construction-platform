@@ -1,0 +1,6 @@
+{
+  "name": "ConstructPulse SaaS Construction Management",
+  "description": "Enterprise dark-mode Construction Management SaaS platform inspired by Corona Modern Vertical design system with project tracking, inventory, drawings, documents, team management, and role-based accounts.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
