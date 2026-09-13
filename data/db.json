@@ -900,12 +900,12 @@
   ],
   "activities": [
     {
-      "id": "act-1789288222454",
+      "id": "act-1789288666973",
       "action": "User Signed In",
-      "details": "Project Director Alex Mercer (manager) logged in as admin.",
+      "details": "Chief Operations Administrator (admin) logged in as superuser.",
       "category": "Auth",
-      "userName": "Project Director Alex Mercer",
-      "timestamp": "2026-09-13T08:30:22.454Z"
+      "userName": "Chief Operations Administrator",
+      "timestamp": "2026-09-13T08:37:46.973Z"
     },
     {
       "id": "act-1",
