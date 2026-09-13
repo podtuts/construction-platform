@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Search, Layers, Compass, Download, ExternalLink } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, Layers, Compass, Download } from 'lucide-react';
 import { Project, ConstructionDrawing, SystemType, DocumentStatus } from '../../types';
 import { api } from '../../services/api';
 import { StatusBadge } from '../common/StatusBadge';
@@ -291,7 +291,6 @@ export const DrawingsView: React.FC<DrawingsViewProps> = ({
                 <th className="py-3 px-4 font-semibold">Revision</th>
                 <th className="py-3 px-4 font-semibold">Site Project</th>
                 <th className="py-3 px-4 font-semibold">Status</th>
-                <th className="py-3 px-4 font-semibold">Architect / Engineer</th>
                 <th className="py-3 px-4 font-semibold">Last Updated</th>
                 <th className="py-3 px-4 font-semibold text-right">Actions</th>
               </tr>
@@ -299,7 +298,7 @@ export const DrawingsView: React.FC<DrawingsViewProps> = ({
             <tbody className="divide-y divide-[#2A2E38]/60 text-white">
               {filteredDrawings.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-8 text-center text-[#626875]">
+                  <td colSpan={6} className="py-8 text-center text-[#626875]">
                     No blueprints or drawings found for this query.
                   </td>
                 </tr>
@@ -325,18 +324,10 @@ export const DrawingsView: React.FC<DrawingsViewProps> = ({
                         disabled={!user}
                       />
                     </td>
-                    <td className="py-3.5 px-4 text-[#8D93A1]">{draw.architectEngineer}</td>
                     <td className="py-3.5 px-4 text-[#8D93A1] text-[11px]">
                       {new Date(draw.updatedAt).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}
                     </td>
                     <td className="py-3.5 px-4 text-right space-x-1.5">
-                      <button
-                        onClick={() => alert(`Opening Blueprint CAD Viewer: ${draw.drawingTitle}`)}
-                        className="p-1.5 rounded bg-[#20232C] hover:bg-[#2A2E38] text-[#8D93A1] hover:text-white"
-                        title="View CAD Blueprint"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </button>
                       {canEdit && (
                         <button
                           onClick={() => openEditModal(draw)}
