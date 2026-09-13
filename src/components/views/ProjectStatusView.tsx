@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Plus, Edit2, Trash2, Filter, Search, CheckCircle, Clock } from 'lucide-react';
+import { Plus, Edit2, Trash2, Filter, Search, CheckCircle, Clock, Download } from 'lucide-react';
 import { Project, ProjectUnit, UnitStatus, SystemType } from '../../types';
 import { api } from '../../services/api';
+import { downloadCSV } from '../../services/export';
 import { StatusBadge } from '../common/StatusBadge';
 import { StatusDropdown } from '../common/StatusDropdown';
 import { Modal } from '../common/Modal';
@@ -71,6 +72,23 @@ export const ProjectStatusView: React.FC<ProjectStatusViewProps> = ({
       u.model.toLowerCase().includes(searchTerm.toLowerCase());
     return matchSite && matchStatus && matchSearch;
   });
+
+  const handleDownloadCSV = () => {
+    downloadCSV(
+      'project-status-' + new Date().toISOString().split('T')[0] + '.csv',
+      ['Site Project', 'Unit ID', 'Model', 'Progress (%)', 'Status', 'System', 'Target Date', 'Notes'],
+      filteredUnits.map((u) => [
+        u.siteName,
+        u.unitId,
+        u.model,
+        u.progress,
+        u.status,
+        u.system || 'Units',
+        u.targetDate,
+        u.notes || ''
+      ])
+    );
+  };
 
   const openEditModal = (unit: ProjectUnit) => {
     setEditingUnit(unit);
@@ -199,25 +217,35 @@ export const ProjectStatusView: React.FC<ProjectStatusViewProps> = ({
           </p>
         </div>
 
-        {canAddUnit && (
+        <div className="flex items-center gap-2">
           <button
-            onClick={() => {
-              setFormSiteId(selectedSiteId !== 'all' ? selectedSiteId : projects[0]?.id || '');
-              setFormUnitId('');
-              setFormModel('');
-              setFormProgress(0);
-              setFormStatus('Planning');
-              setFormSystem('Units');
-              setFormNotes('');
-              setFormError('');
-              setIsAddModalOpen(true);
-            }}
-            className="inline-flex items-center px-3.5 py-2 bg-[#0090FF] hover:bg-[#0080E0] text-white text-xs font-medium rounded-[5px] transition-colors shadow-sm"
+            onClick={handleDownloadCSV}
+            className="inline-flex items-center px-3.5 py-2 bg-[#20232C] hover:bg-[#2A2E38] border border-[#2A2E38] text-[#BAC2D1] hover:text-white text-xs font-medium rounded-[5px] transition-colors"
           >
-            <Plus className="w-4 h-4 mr-1.5" />
-            <span>Add New Unit</span>
+            <Download className="w-4 h-4 mr-1.5" />
+            <span>Download CSV</span>
           </button>
-        )}
+
+          {canAddUnit && (
+            <button
+              onClick={() => {
+                setFormSiteId(selectedSiteId !== 'all' ? selectedSiteId : projects[0]?.id || '');
+                setFormUnitId('');
+                setFormModel('');
+                setFormProgress(0);
+                setFormStatus('Planning');
+                setFormSystem('Units');
+                setFormNotes('');
+                setFormError('');
+                setIsAddModalOpen(true);
+              }}
+              className="inline-flex items-center px-3.5 py-2 bg-[#0090FF] hover:bg-[#0080E0] text-white text-xs font-medium rounded-[5px] transition-colors shadow-sm"
+            >
+              <Plus className="w-4 h-4 mr-1.5" />
+              <span>Add New Unit</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Filter and Search Bar */}

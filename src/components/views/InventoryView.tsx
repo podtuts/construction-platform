@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Search, Boxes, CheckCircle2, AlertTriangle, Clock, Wrench } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, Boxes, CheckCircle2, AlertTriangle, Clock, Wrench, Download } from 'lucide-react';
 import { Project, InventoryItem } from '../../types';
 import { api } from '../../services/api';
+import { downloadCSV } from '../../services/export';
 import { StatusBadge } from '../common/StatusBadge';
 import { Modal } from '../common/Modal';
 import { ConfirmModal } from '../common/ConfirmModal';
@@ -81,6 +82,23 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
       item.location.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
+
+  const handleDownloadCSV = () => {
+    downloadCSV(
+      'inventory-' + new Date().toISOString().split('T')[0] + '.csv',
+      ['Equipment', 'Specs', 'Location', 'Site Project', 'Status', 'Quantity', 'Notes', 'Last Inspected'],
+      filteredInventory.map((i) => [
+        i.equipment,
+        i.specs,
+        i.location,
+        i.siteName,
+        i.status,
+        i.quantity,
+        i.notes,
+        i.lastInspected
+      ])
+    );
+  };
 
   const openEditModal = (item: InventoryItem) => {
     setEditingItem(item);
@@ -187,25 +205,35 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
           </p>
         </div>
 
-        {canEdit && (
+        <div className="flex items-center gap-2">
           <button
-            onClick={() => {
-              setFormEquipment('');
-              setFormSpecs('');
-              setFormLocation('');
-              setFormSiteId(selectedSiteId !== 'all' ? selectedSiteId : projects[0]?.id || '');
-              setFormStatus('Operational');
-              setFormQuantity(1);
-              setFormNotes('');
-              setFormError('');
-              setIsAddModalOpen(true);
-            }}
-            className="inline-flex items-center px-3.5 py-2 bg-[#0090FF] hover:bg-[#0080E0] text-white text-xs font-medium rounded-[5px] transition-colors"
+            onClick={handleDownloadCSV}
+            className="inline-flex items-center px-3.5 py-2 bg-[#20232C] hover:bg-[#2A2E38] border border-[#2A2E38] text-[#BAC2D1] hover:text-white text-xs font-medium rounded-[5px] transition-colors"
           >
-            <Plus className="w-4 h-4 mr-1.5" />
-            <span>Add Equipment</span>
+            <Download className="w-4 h-4 mr-1.5" />
+            <span>Download CSV</span>
           </button>
-        )}
+
+          {canEdit && (
+            <button
+              onClick={() => {
+                setFormEquipment('');
+                setFormSpecs('');
+                setFormLocation('');
+                setFormSiteId(selectedSiteId !== 'all' ? selectedSiteId : projects[0]?.id || '');
+                setFormStatus('Operational');
+                setFormQuantity(1);
+                setFormNotes('');
+                setFormError('');
+                setIsAddModalOpen(true);
+              }}
+              className="inline-flex items-center px-3.5 py-2 bg-[#0090FF] hover:bg-[#0080E0] text-white text-xs font-medium rounded-[5px] transition-colors"
+            >
+              <Plus className="w-4 h-4 mr-1.5" />
+              <span>Add Equipment</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Filter and Search Bar */}

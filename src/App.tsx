@@ -13,6 +13,8 @@ import { DocumentsView } from './components/views/DocumentsView';
 import { DrawingsView } from './components/views/DrawingsView';
 import { ContactsView } from './components/views/ContactsView';
 import { ContractorsView } from './components/views/ContractorsView';
+import { ActivityLogsView } from './components/views/ActivityLogsView';
+import { ReportView } from './components/views/ReportView';
 import { AccountsView } from './components/views/AccountsView';
 import { SettingsView } from './components/views/SettingsView';
 import { TodoView } from './components/views/TodoView';
@@ -180,6 +182,10 @@ const AppContent: React.FC = () => {
           {activeTab === 'contacts' && <ContactsView />}
 
           {activeTab === 'contractors' && <ContractorsView projects={projects} />}
+
+          {activeTab === 'activity-logs' && <ActivityLogsView />}
+
+          {activeTab === 'reports' && <ReportView />}
 
           {activeTab === 'accounts' && <AccountsView />}
 

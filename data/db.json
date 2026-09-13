@@ -969,6 +969,86 @@
   ],
   "activities": [
     {
+      "id": "act-10",
+      "action": "Document Received",
+      "details": "Pinecrest Valley: Environmental Compliance Certificate (ECC) received from DENR.",
+      "category": "Documents",
+      "userName": "Engr. Beatrice Morales",
+      "timestamp": "2026-04-18T10:00:00.000Z"
+    },
+    {
+      "id": "act-11",
+      "action": "Drawing Approved",
+      "details": "Apex Precision Industrial Facility: SPU-3 34.5kV Substation Single-Line Diagram approved for construction.",
+      "category": "Drawings",
+      "userName": "Project Director Alex Mercer",
+      "timestamp": "2026-04-15T15:30:00.000Z"
+    },
+    {
+      "id": "act-12",
+      "action": "Inventory Deployed",
+      "details": "Oakwood Heights: 2x Concrete vibrators and 1x scaffolding set deployed to Block-2.",
+      "category": "Inventory",
+      "userName": "Engr. David Ramos",
+      "timestamp": "2026-04-14T08:45:00.000Z"
+    },
+    {
+      "id": "act-13",
+      "action": "Contractor Assigned",
+      "details": "Horizon Grand Towers: Ascend Steel Builders Inc. assigned for 3F-4F structural works.",
+      "category": "Contractors",
+      "userName": "Project Director Alex Mercer",
+      "timestamp": "2026-04-13T09:20:00.000Z"
+    },
+    {
+      "id": "act-14",
+      "action": "Todo Completed",
+      "details": "Apex Precision Industrial Facility: Inspect emergency eyewash stations & fire suppression dry valves in Bay 2.",
+      "category": "To Do",
+      "userName": "Carla Mendoza",
+      "timestamp": "2026-04-19T10:15:00.000Z"
+    },
+    {
+      "id": "act-15",
+      "action": "Schedule Confirmed",
+      "details": "Apex Precision Industrial Facility: 1250kVA Emergency GenSet full load bank testing scheduled with Cummins Power rep.",
+      "category": "Schedules",
+      "userName": "Carla Mendoza",
+      "timestamp": "2026-04-17T11:00:00.000Z"
+    },
+    {
+      "id": "act-16",
+      "action": "Unit Status: Ongoing → Punchlist",
+      "details": "Pinecrest Valley Subdivision: Block-1 Lot-3 HVAC multi-split installation complete, entering Punchlist (88%).",
+      "category": "Project Status",
+      "userName": "Engr. Beatrice Morales",
+      "timestamp": "2026-04-12T14:00:00.000Z"
+    },
+    {
+      "id": "act-17",
+      "action": "Inventory Under Maintenance",
+      "details": "Horizon Grand Towers: Tower crane slew motor sent for preventive maintenance.",
+      "category": "Inventory",
+      "userName": "Engr. Derrick Chen",
+      "timestamp": "2026-04-11T16:30:00.000Z"
+    },
+    {
+      "id": "act-18",
+      "action": "Drawing Received",
+      "details": "Horizon Grand Towers: Chilled Water Piping, FCU Locations & Condensate Run Rev-04 received from MEP consultant.",
+      "category": "Drawings",
+      "userName": "Engr. Derrick Chen",
+      "timestamp": "2026-04-05T09:00:00.000Z"
+    },
+    {
+      "id": "act-19",
+      "action": "Document Handover",
+      "details": "Oakwood Heights Subdivision: Occupancy permit and warranty binder handed over for Block-1 Lot 6.",
+      "category": "Documents",
+      "userName": "Arch. Nicole Reyes",
+      "timestamp": "2026-04-03T13:10:00.000Z"
+    },
+    {
       "id": "act-1789294041003",
       "action": "User Signed In",
       "details": "Chief Operations Administrator (admin) logged in as superuser.",

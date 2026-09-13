@@ -1,7 +1,8 @@
-﻿import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Search, Phone, Mail, Contact } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plus, Edit2, Trash2, Search, Phone, Mail, Contact, Download } from 'lucide-react';
 import { Contact as ContactType } from '../../types';
 import { api } from '../../services/api';
+import { downloadCSV } from '../../services/export';
 import { Modal } from '../common/Modal';
 import { ConfirmModal } from '../common/ConfirmModal';
 import { useAuth } from '../../context/AuthContext';
@@ -64,6 +65,14 @@ export const ContactsView: React.FC = () => {
       c.email.toLowerCase().includes(q)
     );
   });
+
+  const handleDownloadCSV = () => {
+    downloadCSV(
+      'contacts-' + new Date().toISOString().split('T')[0] + '.csv',
+      ['Name', 'Company', 'Position', 'Mobile No', 'Email'],
+      filteredContacts.map((c) => [c.name, c.company, c.position, c.mobileNo, c.email])
+    );
+  };
 
   const resetForm = () => {
     setFormName('');
@@ -264,15 +273,25 @@ export const ContactsView: React.FC = () => {
           </p>
         </div>
 
-        {canEdit && (
+        <div className="flex items-center gap-2">
           <button
-            onClick={openAddModal}
-            className="inline-flex items-center px-3.5 py-2 bg-[#0090FF] hover:bg-[#0080E0] text-white text-xs font-medium rounded-[5px] transition-colors"
+            onClick={handleDownloadCSV}
+            className="inline-flex items-center px-3.5 py-2 bg-[#20232C] hover:bg-[#2A2E38] border border-[#2A2E38] text-[#BAC2D1] hover:text-white text-xs font-medium rounded-[5px] transition-colors"
           >
-            <Plus className="w-4 h-4 mr-1.5" />
-            <span>Add Contact</span>
+            <Download className="w-4 h-4 mr-1.5" />
+            <span>Download CSV</span>
           </button>
-        )}
+
+          {canEdit && (
+            <button
+              onClick={openAddModal}
+              className="inline-flex items-center px-3.5 py-2 bg-[#0090FF] hover:bg-[#0080E0] text-white text-xs font-medium rounded-[5px] transition-colors"
+            >
+              <Plus className="w-4 h-4 mr-1.5" />
+              <span>Add Contact</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Search Bar */}

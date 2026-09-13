@@ -1,7 +1,8 @@
-﻿import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Search, Phone, Mail, Users, HardHat, Building2, ClipboardList } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plus, Edit2, Trash2, Search, Phone, Mail, Users, HardHat, Building2, ClipboardList, Download } from 'lucide-react';
 import { Project, Contractor } from '../../types';
 import { api } from '../../services/api';
+import { downloadCSV } from '../../services/export';
 import { Modal } from '../common/Modal';
 import { ConfirmModal } from '../common/ConfirmModal';
 import { useAuth } from '../../context/AuthContext';
@@ -72,6 +73,22 @@ export const ContractorsView: React.FC<ContractorsViewProps> = ({ projects }) =>
       c.siteName.toLowerCase().includes(q);
     return matchSite && matchQuery;
   });
+
+  const handleDownloadCSV = () => {
+    downloadCSV(
+      'contractors-' + new Date().toISOString().split('T')[0] + '.csv',
+      ['Company Name', 'No. of Staff', 'Site Assigned', 'Scope of Work', 'Contact Person', 'Mobile No', 'Email'],
+      filteredContractors.map((c) => [
+        c.companyName,
+        c.staffCount,
+        c.siteName,
+        c.scopeOfWork,
+        c.contactPerson,
+        c.contactMobileNo,
+        c.contactEmail
+      ])
+    );
+  };
 
   const resetForm = () => {
     setFormCompanyName('');
@@ -316,15 +333,25 @@ export const ContractorsView: React.FC<ContractorsViewProps> = ({ projects }) =>
           </p>
         </div>
 
-        {canEdit && (
+        <div className="flex items-center gap-2">
           <button
-            onClick={openAddModal}
-            className="inline-flex items-center px-3.5 py-2 bg-[#0090FF] hover:bg-[#0080E0] text-white text-xs font-medium rounded-[5px] transition-colors"
+            onClick={handleDownloadCSV}
+            className="inline-flex items-center px-3.5 py-2 bg-[#20232C] hover:bg-[#2A2E38] border border-[#2A2E38] text-[#BAC2D1] hover:text-white text-xs font-medium rounded-[5px] transition-colors"
           >
-            <Plus className="w-4 h-4 mr-1.5" />
-            <span>Add Contractor</span>
+            <Download className="w-4 h-4 mr-1.5" />
+            <span>Download CSV</span>
           </button>
-        )}
+
+          {canEdit && (
+            <button
+              onClick={openAddModal}
+              className="inline-flex items-center px-3.5 py-2 bg-[#0090FF] hover:bg-[#0080E0] text-white text-xs font-medium rounded-[5px] transition-colors"
+            >
+              <Plus className="w-4 h-4 mr-1.5" />
+              <span>Add Contractor</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Filter and Search Bar */}

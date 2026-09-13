@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Search, FileText, CheckCircle, Upload } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, FileText, CheckCircle, Upload, Download } from 'lucide-react';
 import { Project, ConstructionDocument, DocumentStatus } from '../../types';
 import { api } from '../../services/api';
+import { downloadCSV } from '../../services/export';
 import { StatusBadge } from '../common/StatusBadge';
 import { StatusDropdown } from '../common/StatusDropdown';
 import { Modal } from '../common/Modal';
@@ -76,6 +77,22 @@ export const DocumentsView: React.FC<DocumentsViewProps> = ({
       d.uploadedBy.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
+
+  const handleDownloadCSV = () => {
+    downloadCSV(
+      'documents-' + new Date().toISOString().split('T')[0] + '.csv',
+      ['Site Project', 'Document Name', 'Category', 'Status', 'Uploaded By', 'File Size', 'Last Updated'],
+      filteredDocs.map((d) => [
+        d.siteName,
+        d.documentName,
+        d.category,
+        d.status,
+        d.uploadedBy,
+        d.fileSize,
+        d.updatedAt
+      ])
+    );
+  };
 
   const openEditModal = (d: ConstructionDocument) => {
     setEditingDoc(d);
@@ -194,24 +211,34 @@ export const DocumentsView: React.FC<DocumentsViewProps> = ({
           </p>
         </div>
 
-        {canUpload && (
+        <div className="flex items-center gap-2">
           <button
-            onClick={() => {
-              setFormSiteId(selectedSiteId !== 'all' ? selectedSiteId : projects[0]?.id || '');
-              setFormName('');
-              setFormCategory('Permits & Compliance');
-              setFormStatus('Received');
-              setFormUploadedBy(user?.fullName || 'Project Admin');
-              setFormFileSize('3.1 MB');
-              setFormError('');
-              setIsAddModalOpen(true);
-            }}
-            className="inline-flex items-center px-3.5 py-2 bg-[#0090FF] hover:bg-[#0080E0] text-white text-xs font-medium rounded-[5px] transition-colors"
+            onClick={handleDownloadCSV}
+            className="inline-flex items-center px-3.5 py-2 bg-[#20232C] hover:bg-[#2A2E38] border border-[#2A2E38] text-[#BAC2D1] hover:text-white text-xs font-medium rounded-[5px] transition-colors"
           >
-            <Plus className="w-4 h-4 mr-1.5" />
-            <span>Upload Document</span>
+            <Download className="w-4 h-4 mr-1.5" />
+            <span>Download CSV</span>
           </button>
-        )}
+
+          {canUpload && (
+            <button
+              onClick={() => {
+                setFormSiteId(selectedSiteId !== 'all' ? selectedSiteId : projects[0]?.id || '');
+                setFormName('');
+                setFormCategory('Permits & Compliance');
+                setFormStatus('Received');
+                setFormUploadedBy(user?.fullName || 'Project Admin');
+                setFormFileSize('3.1 MB');
+                setFormError('');
+                setIsAddModalOpen(true);
+              }}
+              className="inline-flex items-center px-3.5 py-2 bg-[#0090FF] hover:bg-[#0080E0] text-white text-xs font-medium rounded-[5px] transition-colors"
+            >
+              <Plus className="w-4 h-4 mr-1.5" />
+              <span>Upload Document</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Filter and Search Bar */}

@@ -10,6 +10,7 @@ import documentRoutes from './routes/documentRoutes';
 import drawingRoutes from './routes/drawingRoutes';
 import contactRoutes from './routes/contactRoutes';
 import contractorRoutes from './routes/contractorRoutes';
+import activityRoutes from './routes/activityRoutes';
 import settingsRoutes from './routes/settingsRoutes';
 import todoRoutes from './routes/todoRoutes';
 import scheduleRoutes from './routes/scheduleRoutes';
@@ -35,6 +36,7 @@ async function startServer() {
   app.use('/api/drawings', drawingRoutes);
   app.use('/api/contacts', contactRoutes);
   app.use('/api/contractors', contractorRoutes);
+  app.use('/api/activities', activityRoutes);
   app.use('/api/todos', todoRoutes);
   app.use('/api/schedules', scheduleRoutes);
   app.use('/api', settingsRoutes);

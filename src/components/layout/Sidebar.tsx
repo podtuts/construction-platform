@@ -12,6 +12,8 @@ import {
   Settings,
   HardHat,
   Contact,
+  History,
+  FileBarChart2,
   Building2,
   X
 } from 'lucide-react';
@@ -31,7 +33,9 @@ export type ActiveTab =
   | 'drawings'
   | 'contacts'
   | 'contractors'
+  | 'activity-logs'
   | 'accounts'
+  | 'reports'
   | 'settings';
 
 interface SidebarProps {
@@ -78,12 +82,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'documents' as ActiveTab, label: 'Documents', icon: FileText },
         { id: 'drawings' as ActiveTab, label: 'Drawings', icon: Layers },
         { id: 'contacts' as ActiveTab, label: 'Contacts', icon: Contact },
-        { id: 'contractors' as ActiveTab, label: 'Contractors', icon: HardHat }
+        { id: 'contractors' as ActiveTab, label: 'Contractors', icon: HardHat },
+        { id: 'activity-logs' as ActiveTab, label: 'Activity Logs', icon: History }
       ]
     },
     {
       label: 'SYSTEM',
       items: [
+        { id: 'reports' as ActiveTab, label: 'Reports', icon: FileBarChart2 },
         { id: 'accounts' as ActiveTab, label: 'Accounts', icon: ShieldCheck },
         // Company Settings (branding, logos, banners) is superuser-only
         ...(isSuperuser
