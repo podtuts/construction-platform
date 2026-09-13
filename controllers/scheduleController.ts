@@ -37,10 +37,14 @@ export const getSchedules = (req: Request, res: Response) => {
 
 export const createSchedule = (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { siteId, date, activity, attendees, notes, status } = req.body;
+    const { siteId, date, startTime, endTime, activity, attendees, notes, status } = req.body;
 
-    if (!siteId || !date || !activity) {
-      return res.status(400).json({ error: 'Site, date, and activity description are required' });
+    if (!siteId || !date || !startTime || !endTime || !activity) {
+      return res.status(400).json({ error: 'Site, date, start time, end time, and activity description are required' });
+    }
+
+    if (endTime <= startTime) {
+      return res.status(400).json({ error: 'End time must be after start time' });
     }
 
     const state = db.getState();
@@ -54,6 +58,8 @@ export const createSchedule = (req: AuthenticatedRequest, res: Response) => {
       siteId,
       siteName: site.name,
       date,
+      startTime,
+      endTime,
       activity: activity.trim(),
       attendees: (attendees || '').trim(),
       notes: (notes || '').trim(),
@@ -77,7 +83,7 @@ export const createSchedule = (req: AuthenticatedRequest, res: Response) => {
 export const updateSchedule = (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
-    const { siteId, date, activity, attendees, notes, status } = req.body;
+    const { siteId, date, startTime, endTime, activity, attendees, notes, status } = req.body;
 
     const state = db.getState();
     if (!state.schedules) state.schedules = [];
@@ -98,6 +104,12 @@ export const updateSchedule = (req: AuthenticatedRequest, res: Response) => {
     }
 
     if (date) existing.date = date;
+    if (startTime !== undefined) existing.startTime = startTime;
+    if (endTime !== undefined) existing.endTime = endTime;
+    if ((startTime !== undefined || endTime !== undefined) &&
+      (existing.endTime || '') <= (existing.startTime || '')) {
+      return res.status(400).json({ error: 'End time must be after start time' });
+    }
     if (activity) existing.activity = activity.trim();
     if (attendees !== undefined) existing.attendees = attendees.trim();
     if (notes !== undefined) existing.notes = notes.trim();

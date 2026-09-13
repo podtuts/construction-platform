@@ -167,6 +167,8 @@ export interface ScheduleItem {
   siteId: string;
   siteName: string;
   date: string;
+  startTime: string;
+  endTime: string;
   activity: string;
   attendees: string;
   notes: string;
@@ -1317,6 +1319,8 @@ const initialData: DatabaseState = {
       siteId: 'proj-1',
       siteName: 'Oakwood Heights Executive Village',
       date: '2026-04-22',
+      startTime: '07:00',
+      endTime: '12:00',
       activity: 'Ready-Mix Concrete Pouring for Block-2 Foundation',
       attendees: 'Engr. David Ramos, Concreting Crew Alpha (8 pax), QC Batching Inspector',
       notes: 'Pumping truck arrives at 07:00 AM. Slump test and cylinder test samples required.',
@@ -1329,6 +1333,8 @@ const initialData: DatabaseState = {
       siteId: 'proj-2',
       siteName: 'Horizon Grand Towers Condominium',
       date: '2026-04-23',
+      startTime: '09:00',
+      endTime: '11:00',
       activity: 'Bureau of Fire Protection (BFP) Final Safety Inspection',
       attendees: 'Chief Safety Officer, Engr. Derrick Chen, BFP Inspectorate Team',
       notes: 'Wet standpipe pressure test, fire alarm annunciator panel demonstration, and sprinkler flow testing.',
@@ -1341,6 +1347,8 @@ const initialData: DatabaseState = {
       siteId: 'proj-4',
       siteName: 'Apex Precision Logistics & Manufacturing Hub',
       date: '2026-04-21',
+      startTime: '08:00',
+      endTime: '12:00',
       activity: '1250kVA Emergency GenSet Full Load Bank Testing',
       attendees: 'Carla Mendoza, Cummins Power Technical Rep, Meralco Field Liaison',
       notes: 'Run GenSet on 100% inductive load bank for 4 consecutive hours.',
@@ -1353,6 +1361,8 @@ const initialData: DatabaseState = {
       siteId: 'proj-3',
       siteName: 'Serenity Hills Mountain Estate',
       date: '2026-04-25',
+      startTime: '08:30',
+      endTime: '11:30',
       activity: 'Soil Compaction & Core Density Testing - Access Arterial Road',
       attendees: 'Engr. Rafael Santos, Geotechnical Testing Lab Technicians',
       notes: 'Nuclear density gauge test every 50 meters along Road Lot 2.',
@@ -1365,6 +1375,8 @@ const initialData: DatabaseState = {
       siteId: 'proj-1',
       siteName: 'Oakwood Heights Executive Village',
       date: '2026-04-19',
+      startTime: '09:00',
+      endTime: '12:00',
       activity: 'Pre-Turnover Joint Walkthrough with Homeowner Block-1 Lot 6',
       attendees: 'Arch. Nicole Reyes, Client Relations Head, Property Buyer',
       notes: 'All items marked Punchlist rectified; key turnover handover completed.',
@@ -1410,6 +1422,15 @@ function initStorage() {
         siteId: a.siteId || '',
         siteName: a.siteName || 'Unassigned'
       }));
+
+      // Normalize legacy schedules so every record carries start/end times
+      if (dbState.schedules) {
+        dbState.schedules = dbState.schedules.map(s => ({
+          ...s,
+          startTime: s.startTime || '',
+          endTime: s.endTime || ''
+        }));
+      }
 
       // Ensure seeded users exist with correct passwords if missing
       const adminExists = dbState.users.some(u => u.username.toLowerCase() === 'admin');

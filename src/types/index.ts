@@ -163,6 +163,8 @@ export interface ScheduleItem {
   siteId: string;
   siteName: string;
   date: string;
+  startTime: string;
+  endTime: string;
   activity: string;
   attendees: string;
   notes: string;
