@@ -31,15 +31,6 @@ export const updateSettings = (req: AuthenticatedRequest, res: Response) => {
     if (primaryColor) state.settings.primaryColor = primaryColor.trim();
     state.settings.updatedAt = new Date().toISOString();
 
-    state.activities.unshift({
-      id: 'act-' + Date.now(),
-      action: 'Company Branding Updated',
-      details: `Company profile updated to "${state.settings.companyName}".`,
-      category: 'Settings',
-      userName: req.user ? req.user.fullName : 'Administrator',
-      timestamp: new Date().toISOString()
-    });
-
     db.save();
     res.json({ message: 'Settings saved successfully', settings: state.settings });
   } catch (err: any) {
@@ -87,9 +78,9 @@ export const getDashboardSummary = (req: Request, res: Response) => {
       totalBudget,
       totalSpent
     },
-    // Site Activity Feed in Dashboard should only show Status changes of Project Status
-    activities: state.activities
-      .filter(a => a.category === 'Project Status' || a.action.toLowerCase().includes('status'))
+    // Site Activity Feed in Dashboard shows the latest manually recorded daily site activities
+    activities: [...state.activities]
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
       .slice(0, 10)
   });
 };

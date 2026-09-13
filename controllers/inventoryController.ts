@@ -42,15 +42,6 @@ export const createInventory = (req: AuthenticatedRequest, res: Response) => {
 
     state.inventory.push(newItem);
 
-    state.activities.unshift({
-      id: 'act-' + Date.now(),
-      action: 'Inventory Registered',
-      details: `${site.name}: Registered "${newItem.equipment}" at ${newItem.location}.`,
-      category: 'Inventory',
-      userName: req.user ? req.user.fullName : 'System',
-      timestamp: new Date().toISOString()
-    });
-
     db.save();
     res.status(201).json({ message: 'Equipment added', item: newItem });
   } catch (err: any) {

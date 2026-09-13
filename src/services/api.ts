@@ -266,8 +266,14 @@ export const api = {
     return request<{ contractors: Contractor[] }>(`/api/contractors?${q.toString()}`);
   },
 
-  // Activity Logs (latest 50 records)
+  // Activity Logs (latest 50 records, manually recorded only)
   getActivities: () => request<{ activities: ActivityLog[] }>('/api/activities'),
+
+  createActivity: (activity: Partial<ActivityLog>) =>
+    request<{ message: string; activity: ActivityLog }>('/api/activities', {
+      method: 'POST',
+      body: JSON.stringify(activity)
+    }),
 
   createContractor: (contractor: Partial<Contractor>) =>
     request<{ message: string; contractor: Contractor }>('/api/contractors', {

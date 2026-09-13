@@ -135,6 +135,8 @@ export interface ConstructionDrawing {
 
 export interface ActivityLog {
   id: string;
+  siteId: string;
+  siteName: string;
   action: string;
   details: string;
   category: string;
@@ -1158,126 +1160,88 @@ const initialData: DatabaseState = {
       updatedAt: '2026-03-30'
     }
   ],
+  // Activity Logs are MANUAL daily site records only (joint site inspections,
+  // weather interruptions, deliveries, government audits, safety meetings, etc.)
   activities: [
     {
       id: 'act-1',
-      action: 'Unit Status: Ongoing → T&C',
-      details: 'Horizon Grand Towers: 3F Unit-1 transitioned to T&C at 92% completion.',
-      category: 'Project Status',
-      userName: 'Engr. Derrick Chen',
-      timestamp: '2026-04-19T14:20:00.000Z'
+      siteId: 'proj-1',
+      siteName: 'Oakwood Heights Subdivision',
+      action: 'Joint Site Inspection',
+      details: 'Joint walkthrough with client representative and structural consultant covering Block-1 Lot-2 punchlist items and pending ELV intercom tests.',
+      category: 'Site Inspection',
+      userName: 'Engr. David Ramos',
+      timestamp: '2026-04-19T15:30:00.000Z'
     },
     {
       id: 'act-2',
-      action: 'Unit Status: T&C → Completed',
-      details: 'Oakwood Heights: Block-1 Lot 1 marked Completed (100% turnkey quality inspection passed).',
-      category: 'Project Status',
-      userName: 'Project Director Alex Mercer',
-      timestamp: '2026-04-19T11:45:00.000Z'
+      siteId: 'proj-3',
+      siteName: 'Horizon Grand Towers',
+      action: 'Heavy Rains Paused Construction',
+      details: 'Continuous heavy rains from the southwest monsoon paused all aerial works and concrete pouring on 3F-4F for the entire day.',
+      category: 'Weather',
+      userName: 'Engr. Derrick Chen',
+      timestamp: '2026-04-19T08:00:00.000Z'
     },
     {
       id: 'act-3',
-      action: 'Unit Status: Punchlist → Handover',
-      details: 'Oakwood Heights: Block-1 Lot 6 client acceptance signed and handed over.',
-      category: 'Project Status',
-      userName: 'Arch. Nicole Reyes',
-      timestamp: '2026-04-18T16:10:00.000Z'
+      siteId: 'proj-2',
+      siteName: 'Pinecrest Valley Subdivision',
+      action: 'Delivery of Gardening Plants',
+      details: '120 golden bamboo pots and 25 ornamental palms delivered for the clubhouse landscape zone; unloading supervised by site foreman.',
+      category: 'Deliveries',
+      userName: 'Engr. Beatrice Morales',
+      timestamp: '2026-04-18T10:45:00.000Z'
     },
     {
       id: 'act-4',
-      action: 'Unit Status: Planning → Ongoing',
-      details: 'Serenity Hills Estate: Block-1 Lot 8 foundation commenced, status set to Ongoing (25%).',
-      category: 'Project Status',
-      userName: 'Engr. David Ramos',
-      timestamp: '2026-04-17T09:30:00.000Z'
+      siteId: 'proj-4',
+      siteName: 'Apex Precision Industrial Facility',
+      action: 'Government Engineer Audit',
+      details: 'DPWH and LGU building officials conducted a surprise audit of fire exits, structural permits, and scaffolding safety compliance in Bay-2.',
+      category: 'Government Audit',
+      userName: 'Carla Mendoza',
+      timestamp: '2026-04-18T09:15:00.000Z'
     },
     {
       id: 'act-5',
-      action: 'Unit Status: Ongoing → Punchlist',
-      details: 'Apex Precision Logistics Hub: Bay-1 Warehouse MEP finalized, entering Punchlist rectifications (95%).',
-      category: 'Project Status',
-      userName: 'Engr. Derrick Chen',
-      timestamp: '2026-04-16T13:15:00.000Z'
-    },
-    {
-      id: 'act-10',
-      action: 'Document Received',
-      details: 'Pinecrest Valley: Environmental Compliance Certificate (ECC) received from DENR.',
-      category: 'Documents',
-      userName: 'Engr. Beatrice Morales',
-      timestamp: '2026-04-18T10:00:00.000Z'
-    },
-    {
-      id: 'act-11',
-      action: 'Drawing Approved',
-      details: 'Apex Precision Industrial Facility: SPU-3 34.5kV Substation Single-Line Diagram approved for construction.',
-      category: 'Drawings',
-      userName: 'Project Director Alex Mercer',
-      timestamp: '2026-04-15T15:30:00.000Z'
-    },
-    {
-      id: 'act-12',
-      action: 'Inventory Deployed',
-      details: 'Oakwood Heights: 2x Concrete vibrators and 1x scaffolding set deployed to Block-2.',
-      category: 'Inventory',
+      siteId: 'proj-1',
+      siteName: 'Oakwood Heights Subdivision',
+      action: 'Concrete Pouring Completed',
+      details: 'Block-1 Lot-4 slab-on-grade pouring completed (32 cubic meters) with 28-day concrete cylinder samples taken by QC inspector.',
+      category: 'General',
       userName: 'Engr. David Ramos',
-      timestamp: '2026-04-14T08:45:00.000Z'
+      timestamp: '2026-04-17T16:20:00.000Z'
     },
     {
-      id: 'act-13',
-      action: 'Contractor Assigned',
-      details: 'Horizon Grand Towers: Ascend Steel Builders Inc. assigned for 3F-4F structural works.',
-      category: 'Contractors',
-      userName: 'Project Director Alex Mercer',
-      timestamp: '2026-04-13T09:20:00.000Z'
+      id: 'act-6',
+      siteId: 'proj-3',
+      siteName: 'Horizon Grand Towers',
+      action: 'Safety Toolbox Meeting',
+      details: 'Morning toolbox meeting on tower crane signaling protocol and PPE compliance; 42 site workers in attendance.',
+      category: 'Safety',
+      userName: 'Engr. Derrick Chen',
+      timestamp: '2026-04-17T07:30:00.000Z'
     },
     {
-      id: 'act-14',
-      action: 'Todo Completed',
-      details: 'Apex Precision Industrial Facility: Inspect emergency eyewash stations & fire suppression dry valves in Bay 2.',
-      category: 'To Do',
+      id: 'act-7',
+      siteId: 'proj-4',
+      siteName: 'Apex Precision Industrial Facility',
+      action: 'Delivery of Structural Steel Plates',
+      details: '48 sheets of 6mm steel plates and angle bars delivered for the Area-2 CNC bay trench lining; mill certificates on file.',
+      category: 'Deliveries',
       userName: 'Carla Mendoza',
-      timestamp: '2026-04-19T10:15:00.000Z'
+      timestamp: '2026-04-16T11:10:00.000Z'
     },
     {
-      id: 'act-15',
-      action: 'Schedule Confirmed',
-      details: 'Apex Precision Industrial Facility: 1250kVA Emergency GenSet full load bank testing scheduled with Cummins Power rep.',
-      category: 'Schedules',
-      userName: 'Carla Mendoza',
-      timestamp: '2026-04-17T11:00:00.000Z'
-    },
-    {
-      id: 'act-16',
-      action: 'Unit Status: Ongoing → Punchlist',
-      details: 'Pinecrest Valley Subdivision: Block-1 Lot-3 HVAC multi-split installation complete, entering Punchlist (88%).',
-      category: 'Project Status',
+      id: 'act-8',
+      siteId: 'proj-2',
+      siteName: 'Pinecrest Valley Subdivision',
+      action: 'Site Progress Meeting',
+      details: 'Weekly coordination meeting with foremen, QC, and safety officers; sidewalk gutter works rescheduled to next billing cycle.',
+      category: 'General',
       userName: 'Engr. Beatrice Morales',
-      timestamp: '2026-04-12T14:00:00.000Z'
-    },
-    {
-      id: 'act-17',
-      action: 'Inventory Under Maintenance',
-      details: 'Horizon Grand Towers: Tower crane slew motor sent for preventive maintenance.',
-      category: 'Inventory',
-      userName: 'Engr. Derrick Chen',
-      timestamp: '2026-04-11T16:30:00.000Z'
-    },
-    {
-      id: 'act-18',
-      action: 'Drawing Received',
-      details: 'Horizon Grand Towers: Chilled Water Piping, FCU Locations & Condensate Run Rev-04 received from MEP consultant.',
-      category: 'Drawings',
-      userName: 'Engr. Derrick Chen',
-      timestamp: '2026-04-05T09:00:00.000Z'
-    },
-    {
-      id: 'act-19',
-      action: 'Document Handover',
-      details: 'Oakwood Heights Subdivision: Occupancy permit and warranty binder handed over for Block-1 Lot 6.',
-      category: 'Documents',
-      userName: 'Arch. Nicole Reyes',
-      timestamp: '2026-04-03T13:10:00.000Z'
+      timestamp: '2026-04-15T14:00:00.000Z'
     }
   ],
   todos: [
@@ -1439,6 +1403,13 @@ function initStorage() {
       if (!dbState.activities) {
         dbState.activities = initialData.activities;
       }
+
+      // Normalize legacy activity logs so every manual record carries its Site
+      dbState.activities = dbState.activities.map(a => ({
+        ...a,
+        siteId: a.siteId || '',
+        siteName: a.siteName || 'Unassigned'
+      }));
 
       // Ensure seeded users exist with correct passwords if missing
       const adminExists = dbState.users.some(u => u.username.toLowerCase() === 'admin');

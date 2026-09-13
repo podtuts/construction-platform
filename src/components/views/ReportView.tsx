@@ -192,18 +192,19 @@ export const ReportView: React.FC = () => {
 
     const activityRows = periodActivities.slice(0, 20).map((a) => [
       new Date(a.timestamp).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+      a.siteName || 'Unassigned',
       a.action + (a.details ? ' - ' + a.details : ''),
       a.userName
     ]);
 
     autoTable(doc, {
       startY: cursorY,
-      head: [['Date', 'Activity', 'Attended By']],
-      body: activityRows.length > 0 ? activityRows : [['-', 'No activity recorded for this period', '-']],
+      head: [['Date', 'Site', 'Activity', 'Attended By']],
+      body: activityRows.length > 0 ? activityRows : [['-', '-', 'No activity recorded for this period', '-']],
       theme: 'striped',
       styles: { fontSize: 7, cellPadding: 1.5 },
       headStyles: { fillColor: [0, 144, 255], textColor: 255, fontStyle: 'bold' },
-      columnStyles: { 1: { cellWidth: 100 } }
+      columnStyles: { 2: { cellWidth: 85 } }
     });
 
     cursorY = (doc as any).lastAutoTable.finalY + 7;
@@ -339,6 +340,7 @@ export const ReportView: React.FC = () => {
             <thead className="bg-[#171A21] text-[#8D93A1] uppercase text-[10px] tracking-wider border-b border-[#2A2E38]">
               <tr>
                 <th className="py-3 px-4 font-semibold w-40">Date</th>
+                <th className="py-3 px-4 font-semibold">Site</th>
                 <th className="py-3 px-4 font-semibold">Activity</th>
                 <th className="py-3 px-4 font-semibold">Attended By</th>
               </tr>
@@ -346,7 +348,7 @@ export const ReportView: React.FC = () => {
             <tbody className="divide-y divide-[#2A2E38]/60 text-white">
               {periodActivities.length === 0 ? (
                 <tr>
-                  <td colSpan={3} className="py-8 text-center text-[#626875]">
+                  <td colSpan={4} className="py-8 text-center text-[#626875]">
                     No activity recorded for this period.
                   </td>
                 </tr>
@@ -356,6 +358,7 @@ export const ReportView: React.FC = () => {
                     <td className="py-3 px-4 text-[#8D93A1] text-[11px] align-top">
                       {new Date(a.timestamp).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </td>
+                    <td className="py-3 px-4 font-medium text-[#BAC2D1] align-top">{a.siteName || 'Unassigned'}</td>
                     <td className="py-3 px-4">
                       <div className="font-semibold text-white">{a.action}</div>
                       <div className="text-[11px] text-[#8D93A1] mt-0.5">{a.details}</div>

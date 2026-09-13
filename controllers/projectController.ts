@@ -84,15 +84,6 @@ export const createUnit = (req: AuthenticatedRequest, res: Response) => {
 
     state.units.push(newUnit);
 
-    state.activities.unshift({
-      id: 'act-' + Date.now(),
-      action: `Unit Status Initialized (${status})`,
-      details: `${site.name}: Added unit "${unitId}" with status "${status}" (${progress}%).`,
-      category: 'Project Status',
-      userName: req.user ? req.user.fullName : 'System',
-      timestamp: new Date().toISOString()
-    });
-
     db.save();
     res.status(201).json({ message: 'Unit created successfully', unit: newUnit });
   } catch (err: any) {
@@ -112,8 +103,6 @@ export const updateUnit = (req: AuthenticatedRequest, res: Response) => {
     }
 
     const unit = state.units[idx];
-    const oldStatus = unit.status;
-    const oldProgress = unit.progress;
 
     if (progress !== undefined) unit.progress = Math.min(100, Math.max(0, Number(progress)));
     if (status) unit.status = status;
@@ -126,26 +115,7 @@ export const updateUnit = (req: AuthenticatedRequest, res: Response) => {
 
     state.units[idx] = unit;
 
-    // Site Activity Feed in Dashboard should only show Status changes of Project Status
-    if (oldStatus !== unit.status) {
-      state.activities.unshift({
-        id: 'act-' + Date.now(),
-        action: `Status: ${oldStatus} → ${unit.status}`,
-        details: `${unit.siteName}: ${unit.unitId} status changed from "${oldStatus}" to "${unit.status}" (${unit.progress}%).`,
-        category: 'Project Status',
-        userName: req.user ? req.user.fullName : 'System',
-        timestamp: new Date().toISOString()
-      });
-    } else if (oldProgress !== unit.progress) {
-      state.activities.unshift({
-        id: 'act-' + Date.now(),
-        action: `Status Progress: ${unit.status} (${unit.progress}%)`,
-        details: `${unit.siteName}: ${unit.unitId} (${unit.status}) progressed from ${oldProgress}% to ${unit.progress}%.`,
-        category: 'Project Status',
-        userName: req.user ? req.user.fullName : 'System',
-        timestamp: new Date().toISOString()
-      });
-    }
+    // Activity Logs are manual-only daily site records; no automatic logging here.
 
     db.save();
     res.json({ message: 'Unit updated successfully', unit });
@@ -218,15 +188,6 @@ export const createProject = (req: AuthenticatedRequest, res: Response) => {
 
     state.projects.push(newProject);
 
-    state.activities.unshift({
-      id: 'act-' + Date.now(),
-      action: 'Site Project Created',
-      details: `Site project "${newProject.name}" was created by ${req.user ? req.user.fullName : 'System'} with a budget of ${newProject.budget.toLocaleString('en-US')} ${state.settings.currencySymbol || ''}.`,
-      category: 'Project Status',
-      userName: req.user ? req.user.fullName : 'System',
-      timestamp: new Date().toISOString()
-    });
-
     db.save();
     res.status(201).json({ message: 'Site project created successfully', project: newProject });
   } catch (err: any) {
@@ -273,15 +234,6 @@ export const updateProject = (req: AuthenticatedRequest, res: Response) => {
 
     state.projects[idx] = project;
 
-    state.activities.unshift({
-      id: 'act-' + Date.now(),
-      action: 'Site Project Updated',
-      details: `Site project "${project.name}" information was updated by ${req.user ? req.user.fullName : 'System'}.`,
-      category: 'Project Status',
-      userName: req.user ? req.user.fullName : 'System',
-      timestamp: new Date().toISOString()
-    });
-
     db.save();
     res.json({ message: 'Site project updated successfully', project });
   } catch (err: any) {
@@ -320,15 +272,6 @@ export const deleteProject = (req: AuthenticatedRequest, res: Response) => {
     });
 
     state.projects = state.projects.filter(p => p.id !== id);
-
-    state.activities.unshift({
-      id: 'act-' + Date.now(),
-      action: 'Site Project Deleted',
-      details: `Site project "${project.name}" was permanently removed (units, documents, drawings, and schedules cascaded) by ${req.user ? req.user.fullName : 'System'}.`,
-      category: 'Project Status',
-      userName: req.user ? req.user.fullName : 'System',
-      timestamp: new Date().toISOString()
-    });
 
     db.save();
     res.json({ message: `Site project ${project.name} deleted successfully` });

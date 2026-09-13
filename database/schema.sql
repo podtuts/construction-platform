@@ -117,9 +117,11 @@ CREATE TABLE IF NOT EXISTS drawings (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 9. Activity Logs Table
+-- 9. Activity Logs Table (MANUAL recording only - daily site happenings)
 CREATE TABLE IF NOT EXISTS activity_logs (
   id VARCHAR(50) PRIMARY KEY,
+  site_id VARCHAR(50) REFERENCES projects(id) ON DELETE SET NULL,
+  site_name VARCHAR(255) DEFAULT 'Unassigned',
   action VARCHAR(255) NOT NULL,
   details TEXT,
   category VARCHAR(50) DEFAULT 'General',

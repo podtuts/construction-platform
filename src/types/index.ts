@@ -131,6 +131,8 @@ export interface Contractor {
 
 export interface ActivityLog {
   id: string;
+  siteId: string;
+  siteName: string;
   action: string;
   details: string;
   category: string;

@@ -27,17 +27,6 @@ export const login = async (req: Request, res: Response) => {
 
     const token = generateToken(user, Boolean(rememberMe));
 
-    // Log activity
-    state.activities.unshift({
-      id: 'act-' + Date.now(),
-      action: 'User Signed In',
-      details: `${user.fullName} (${user.username}) logged in as ${user.role}.`,
-      category: 'Auth',
-      userName: user.fullName,
-      timestamp: new Date().toISOString()
-    });
-    db.save();
-
     res.json({
       token,
       user: {
@@ -127,15 +116,6 @@ export const updateUser = async (req: AuthenticatedRequest, res: Response) => {
 
     state.users[targetIndex] = targetUser;
 
-    state.activities.unshift({
-      id: 'act-' + Date.now(),
-      action: 'Account Updated',
-      details: `${currentOperator.fullName} modified credentials/profile for ${targetUser.username} (${targetUser.role}).`,
-      category: 'Auth',
-      userName: currentOperator.fullName,
-      timestamp: new Date().toISOString()
-    });
-
     db.save();
 
     const { passwordHash, ...safe } = targetUser;
@@ -180,15 +160,6 @@ export const createUser = async (req: AuthenticatedRequest, res: Response) => {
 
     state.users.push(newUser);
 
-    state.activities.unshift({
-      id: 'act-' + Date.now(),
-      action: 'New Account Created',
-      details: `Account ${newUser.username} (${newUser.role}) was created by ${currentOperator.fullName}.`,
-      category: 'Auth',
-      userName: currentOperator.fullName,
-      timestamp: new Date().toISOString()
-    });
-
     db.save();
 
     const { passwordHash, ...safe } = newUser;
@@ -220,15 +191,6 @@ export const deleteUser = async (req: AuthenticatedRequest, res: Response) => {
     }
 
     state.users = state.users.filter(u => u.id !== id);
-
-    state.activities.unshift({
-      id: 'act-' + Date.now(),
-      action: 'Account Deleted',
-      details: `User account ${targetUser.username} removed by ${currentOperator.fullName}.`,
-      category: 'Auth',
-      userName: currentOperator.fullName,
-      timestamp: new Date().toISOString()
-    });
 
     db.save();
 

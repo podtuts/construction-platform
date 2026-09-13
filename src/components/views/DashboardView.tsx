@@ -479,38 +479,35 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 <Activity className="w-4 h-4 text-[#0090FF] mr-2" />
                 Site Activity Feed
               </h3>
-              <p className="text-[11px] text-[#8D93A1]">Project Status transitions</p>
+              <p className="text-[11px] text-[#8D93A1]">Manually recorded daily site activities</p>
             </div>
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#00D25B]/10 border border-[#00D25B]/30 text-[#00D25B] font-mono">
-              PROJECT STATUS
+              MANUAL SITE LOGS
             </span>
           </div>
 
           {(() => {
-            const statusActivities = activities.filter(
-              (act) =>
-                act.category === 'Project Status' ||
-                act.category === 'Status' ||
-                act.action.toLowerCase().includes('status')
-            );
+            const recentActivities = activities;
 
-            if (statusActivities.length === 0) {
+            if (recentActivities.length === 0) {
               return (
                 <div className="py-8 text-center text-xs text-[#8D93A1]">
-                  No project status changes recorded yet.
+                  No manual site activities recorded yet.
                 </div>
               );
             }
 
             return (
               <div className="relative pl-4 space-y-4 before:absolute before:left-1.5 before:top-2 before:bottom-2 before:w-[2px] before:bg-[#2A2E38]">
-                {statusActivities.slice(0, 6).map((act) => (
+                {recentActivities.slice(0, 6).map((act) => (
                   <div key={act.id} className="relative group">
                     <div className="absolute -left-[19px] top-1.5 w-2.5 h-2.5 rounded-full bg-[#0090FF] ring-4 ring-[#191C24]" />
                     <div className="text-[13px] font-medium text-white">{act.action}</div>
                     <p className="text-[12px] text-[#8D93A1] mt-0.5 leading-snug">{act.details}</p>
                     <div className="flex items-center space-x-2 mt-1 text-[10px] text-[#626875]">
                       <span className="text-[#BAC2D1]">{act.userName}</span>
+                      <span>•</span>
+                      <span>{act.siteName}</span>
                       <span>•</span>
                       <span>
                         {new Date(act.timestamp).toLocaleDateString([], { month: 'short', day: 'numeric' })}

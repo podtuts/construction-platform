@@ -183,7 +183,13 @@ const AppContent: React.FC = () => {
 
           {activeTab === 'contractors' && <ContractorsView projects={projects} />}
 
-          {activeTab === 'activity-logs' && <ActivityLogsView />}
+          {activeTab === 'activity-logs' && (
+            <ActivityLogsView
+              projects={projects}
+              selectedSiteId={selectedSiteId}
+              setSelectedSiteId={setSelectedSiteId}
+            />
+          )}
 
           {activeTab === 'reports' && <ReportView />}
 
