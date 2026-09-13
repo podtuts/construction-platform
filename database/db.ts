@@ -86,6 +86,27 @@ export interface TeamMember {
   department: string;
 }
 
+export interface Contact {
+  id: string;
+  name: string;
+  company: string;
+  position: string;
+  mobileNo: string;
+  email: string;
+}
+
+export interface Contractor {
+  id: string;
+  companyName: string;
+  staffCount: number;
+  siteId: string;
+  siteName: string;
+  scopeOfWork: string;
+  contactPerson: string;
+  contactMobileNo: string;
+  contactEmail: string;
+}
+
 export type DocumentStatus = 'Received' | 'Approved' | 'Handover';
 
 export interface ConstructionDocument {
@@ -159,6 +180,8 @@ export interface DatabaseState {
   units: ProjectUnit[];
   inventory: InventoryItem[];
   team: TeamMember[];
+  contacts: Contact[];
+  contractors: Contractor[];
   documents: ConstructionDocument[];
   drawings: ConstructionDrawing[];
   activities: ActivityLog[];
@@ -807,6 +830,75 @@ const initialData: DatabaseState = {
       email: 'c.mendoza@apexbuild-saas.com',
       sites: ['Pinecrest Valley Subdivision', 'Apex Precision Industrial Facility'],
       department: 'Health, Safety & Environment'
+    }
+  ],
+  contacts: [
+    {
+      id: 'ct-1',
+      name: 'Engr. Jonathan Cruz',
+      company: 'Cruz Structural Consultants',
+      position: 'Principal Structural Engineer',
+      mobileNo: '+63 917 214 5588',
+      email: 'j.cruz@cruzconsultants.ph'
+    },
+    {
+      id: 'ct-2',
+      name: 'Atty. Ma. Teresa Villanueva',
+      company: 'Villanueva & Partners Law',
+      position: 'Legal Counsel, Contracts',
+      mobileNo: '+63 918 776 3421',
+      email: 't.villanueva@vplaw.ph'
+    },
+    {
+      id: 'ct-3',
+      name: 'Mr. Kevin Lim',
+      company: 'Meralco Business Center',
+      position: 'Utility Account Manager',
+      mobileNo: '+63 920 558 7304',
+      email: 'k.lim@meralco.example'
+    },
+    {
+      id: 'ct-4',
+      name: 'Ms. Andrea Bautista',
+      company: 'Philippine Institute of Civil Engineers',
+      position: 'Membership & Compliance Officer',
+      mobileNo: '+63 926 441 8892',
+      email: 'a.bautista@pice.example'
+    }
+  ],
+  contractors: [
+    {
+      id: 'cn-1',
+      companyName: 'Ascend Steel Builders Inc.',
+      staffCount: 45,
+      siteId: 'proj-3',
+      siteName: 'Horizon Grand Towers',
+      scopeOfWork: 'Structural steel erection, rebar installation, and post-tensioning works',
+      contactPerson: 'Engr. Paolo Domingo',
+      contactMobileNo: '+63 917 340 2288',
+      contactEmail: 'p.domingo@ascendsteel.example'
+    },
+    {
+      id: 'cn-2',
+      companyName: 'PrimeFlow Plumbing & Fire Systems',
+      staffCount: 28,
+      siteId: 'proj-2',
+      siteName: 'Pinecrest Valley Subdivision',
+      scopeOfWork: 'Plumbing rough-ins, fire sprinkler network, and booster pump installation',
+      contactPerson: 'Engr. Lia Fernandez',
+      contactMobileNo: '+63 918 220 9155',
+      contactEmail: 'l.fernandez@primeflow.example'
+    },
+    {
+      id: 'cn-3',
+      companyName: 'VoltageWorks Electrical Services',
+      staffCount: 36,
+      siteId: 'proj-1',
+      siteName: 'Oakwood Heights Subdivision',
+      scopeOfWork: 'Underground distribution lines, panel boards, and perimeter street lighting',
+      contactPerson: 'Mr. Ramon Garcia',
+      contactMobileNo: '+63 920 661 4077',
+      contactEmail: 'r.garcia@voltageworks.example'
     }
   ],
   documents: [

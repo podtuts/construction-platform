@@ -7,6 +7,8 @@ import {
   TeamMember,
   ConstructionDocument,
   ConstructionDrawing,
+  Contact,
+  Contractor,
   DashboardMetrics,
   ActivityLog,
   TodoItem,
@@ -234,6 +236,50 @@ export const api = {
 
   deleteDrawing: (id: string) =>
     request<{ message: string }>(`/api/drawings/${id}`, {
+      method: 'DELETE'
+    }),
+
+  // Contacts
+  getContacts: () => request<{ contacts: Contact[] }>('/api/contacts'),
+
+  createContact: (contact: Partial<Contact>) =>
+    request<{ message: string; contact: Contact }>('/api/contacts', {
+      method: 'POST',
+      body: JSON.stringify(contact)
+    }),
+
+  updateContact: (id: string, contact: Partial<Contact>) =>
+    request<{ message: string; contact: Contact }>(`/api/contacts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(contact)
+    }),
+
+  deleteContact: (id: string) =>
+    request<{ message: string }>(`/api/contacts/${id}`, {
+      method: 'DELETE'
+    }),
+
+  // Contractors
+  getContractors: (params?: { siteId?: string }) => {
+    const q = new URLSearchParams();
+    if (params?.siteId) q.append('siteId', params.siteId);
+    return request<{ contractors: Contractor[] }>(`/api/contractors?${q.toString()}`);
+  },
+
+  createContractor: (contractor: Partial<Contractor>) =>
+    request<{ message: string; contractor: Contractor }>('/api/contractors', {
+      method: 'POST',
+      body: JSON.stringify(contractor)
+    }),
+
+  updateContractor: (id: string, contractor: Partial<Contractor>) =>
+    request<{ message: string; contractor: Contractor }>(`/api/contractors/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(contractor)
+    }),
+
+  deleteContractor: (id: string) =>
+    request<{ message: string }>(`/api/contractors/${id}`, {
       method: 'DELETE'
     }),
 

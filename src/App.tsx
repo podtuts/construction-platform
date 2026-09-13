@@ -11,6 +11,8 @@ import { InventoryView } from './components/views/InventoryView';
 import { TeamView } from './components/views/TeamView';
 import { DocumentsView } from './components/views/DocumentsView';
 import { DrawingsView } from './components/views/DrawingsView';
+import { ContactsView } from './components/views/ContactsView';
+import { ContractorsView } from './components/views/ContractorsView';
 import { AccountsView } from './components/views/AccountsView';
 import { SettingsView } from './components/views/SettingsView';
 import { TodoView } from './components/views/TodoView';
@@ -174,6 +176,10 @@ const AppContent: React.FC = () => {
               setSelectedSiteId={setSelectedSiteId}
             />
           )}
+
+          {activeTab === 'contacts' && <ContactsView />}
+
+          {activeTab === 'contractors' && <ContractorsView projects={projects} />}
 
           {activeTab === 'accounts' && <AccountsView />}
 

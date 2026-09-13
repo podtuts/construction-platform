@@ -11,6 +11,7 @@ import {
   ShieldCheck,
   Settings,
   HardHat,
+  Contact,
   Building2,
   X
 } from 'lucide-react';
@@ -28,6 +29,8 @@ export type ActiveTab =
   | 'team'
   | 'documents'
   | 'drawings'
+  | 'contacts'
+  | 'contractors'
   | 'accounts'
   | 'settings';
 
@@ -73,7 +76,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'inventory' as ActiveTab, label: 'Inventory', icon: Boxes },
         { id: 'team' as ActiveTab, label: 'Team', icon: Users },
         { id: 'documents' as ActiveTab, label: 'Documents', icon: FileText },
-        { id: 'drawings' as ActiveTab, label: 'Drawings', icon: Layers }
+        { id: 'drawings' as ActiveTab, label: 'Drawings', icon: Layers },
+        { id: 'contacts' as ActiveTab, label: 'Contacts', icon: Contact },
+        { id: 'contractors' as ActiveTab, label: 'Contractors', icon: HardHat }
       ]
     },
     {

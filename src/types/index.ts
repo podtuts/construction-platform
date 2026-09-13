@@ -108,6 +108,27 @@ export interface ConstructionDrawing {
   updatedAt: string;
 }
 
+export interface Contact {
+  id: string;
+  name: string;
+  company: string;
+  position: string;
+  mobileNo: string;
+  email: string;
+}
+
+export interface Contractor {
+  id: string;
+  companyName: string;
+  staffCount: number;
+  siteId: string;
+  siteName: string;
+  scopeOfWork: string;
+  contactPerson: string;
+  contactMobileNo: string;
+  contactEmail: string;
+}
+
 export interface ActivityLog {
   id: string;
   action: string;

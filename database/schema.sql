@@ -126,3 +126,28 @@ CREATE TABLE IF NOT EXISTS activity_logs (
   user_name VARCHAR(100) NOT NULL,
   timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- 10. Contacts Table
+CREATE TABLE IF NOT EXISTS contacts (
+  id VARCHAR(50) PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  company VARCHAR(255) DEFAULT '',
+  position VARCHAR(150) DEFAULT '',
+  mobile_no VARCHAR(50) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 11. Contractors Table
+CREATE TABLE IF NOT EXISTS contractors (
+  id VARCHAR(50) PRIMARY KEY,
+  company_name VARCHAR(255) NOT NULL,
+  staff_count INT NOT NULL DEFAULT 0,
+  site_id VARCHAR(50) REFERENCES projects(id) ON DELETE SET NULL,
+  site_name VARCHAR(255) DEFAULT 'Unassigned',
+  scope_of_work TEXT,
+  contact_person VARCHAR(255) NOT NULL,
+  contact_mobile_no VARCHAR(50) NOT NULL,
+  contact_email VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
