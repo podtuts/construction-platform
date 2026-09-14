@@ -32,7 +32,7 @@ export function authenticateToken(req: AuthenticatedRequest, res: Response, next
     username: 'admin',
     role: 'superuser',
     fullName: 'Administrator',
-    email: 'admin@apexbuild-saas.com',
+    email: 'admin@apexbuild-construction.com',
     avatarUrl: '',
     passwordHash: '',
     createdAt: new Date().toISOString()

@@ -78,7 +78,7 @@ export const getDashboardSummary = (req: Request, res: Response) => {
       totalBudget,
       totalSpent
     },
-    // Site Activity Feed in Dashboard shows the latest manually recorded daily site activities
+    // Site Events Feed in Dashboard shows the latest manually recorded daily site events
     activities: [...state.activities]
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
       .slice(0, 10)

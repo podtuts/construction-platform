@@ -15,17 +15,20 @@ export const getActivities = (req: Request, res: Response) => {
 
 // ==========================================================
 // MANUAL RECORDING ONLY
-// Activity Logs are intentionally NOT written automatically by
+// Site Events are intentionally NOT written automatically by
 // other controllers. Field staff/admins manually log daily
-// on-site happenings such as joint site inspections, heavy rains
-// pausing construction, deliveries, government engineer audits, etc.
+// on-site happenings such as safety meetings, site visits,
+// audits, weather interruptions, incidents, utilities,
+// hauling, deliveries and other events.
+// Categories: Safety, Visits, Audits, Weather, Incidents,
+// Utilities, Hauling, Others
 // ==========================================================
 export const createActivity = (req: AuthenticatedRequest, res: Response) => {
   try {
     const { siteId, action, details, category, userName, timestamp } = req.body;
 
     if (!siteId || !action) {
-      return res.status(400).json({ error: 'Site and activity title are required' });
+      return res.status(400).json({ error: 'Site and site event title are required' });
     }
 
     const state = db.getState();
@@ -40,7 +43,7 @@ export const createActivity = (req: AuthenticatedRequest, res: Response) => {
       siteName: site.name,
       action: String(action).trim(),
       details: details ? String(details).trim() : '',
-      category: category ? String(category).trim() : 'General',
+      category: category ? String(category).trim() : 'Others',
       userName: userName && String(userName).trim()
         ? String(userName).trim()
         : (req.user ? req.user.fullName : 'Unrecorded'),
@@ -53,8 +56,8 @@ export const createActivity = (req: AuthenticatedRequest, res: Response) => {
     state.activities.push(newActivity);
     db.save();
 
-    res.status(201).json({ message: 'Activity logged successfully', activity: newActivity });
+    res.status(201).json({ message: 'Site event logged successfully', activity: newActivity });
   } catch (err: any) {
-    res.status(500).json({ error: 'Failed to record activity' });
+    res.status(500).json({ error: 'Failed to record site event' });
   }
 };

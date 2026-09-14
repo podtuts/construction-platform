@@ -69,7 +69,7 @@ const AppContent: React.FC = () => {
       <div className="min-h-screen w-full bg-[#0B0F14] flex flex-col items-center justify-center space-y-3">
         <div className="w-9 h-9 border-3 border-[#0090FF]/30 border-t-[#0090FF] rounded-full animate-spin" />
         <span className="text-xs text-[#8D93A1] font-mono tracking-wider uppercase">
-          Loading ConstructPulse SaaS...
+          Loading ConstructPulse...
         </span>
       </div>
     );

@@ -11,12 +11,12 @@ interface BrandingContextType {
 
 const defaultSettings: CompanySettings = {
   id: 'default',
-  companyName: 'ApexBuild Construction & Engineering SaaS',
+  companyName: 'ApexBuild Construction & Engineering',
   logoUrl: 'https://images.unsplash.com/photo-1541888946425-d0fbb1861593?w=128&auto=format&fit=crop&q=80',
   faviconUrl: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%230090FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>',
   loginBannerUrl: '',
   dashboardBannerUrl: '',
-  contactEmail: 'operations@apexbuild-saas.com',
+  contactEmail: 'operations@apexbuild-construction.com',
   currencySymbol: '₱',
   primaryColor: '#0090FF',
   updatedAt: new Date().toISOString()

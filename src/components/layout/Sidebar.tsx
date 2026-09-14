@@ -83,7 +83,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'drawings' as ActiveTab, label: 'Drawings', icon: Layers },
         { id: 'contacts' as ActiveTab, label: 'Contacts', icon: Contact },
         { id: 'contractors' as ActiveTab, label: 'Contractors', icon: HardHat },
-        { id: 'activity-logs' as ActiveTab, label: 'Activity Logs', icon: History }
+        { id: 'activity-logs' as ActiveTab, label: 'Site Events', icon: History }
       ]
     },
     {
@@ -145,7 +145,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   {settings.companyName || 'ConstructPulse'}
                 </span>
                 <span className="text-[10px] text-[#8D93A1] uppercase tracking-wider block font-medium">
-                  SaaS Enterprise
+                  Enterprise
                 </span>
               </div>
             )}
@@ -221,7 +221,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {!isCollapsed && (
           <div className="p-3 border-t border-[#2A2E38] text-[11px] text-[#626875] flex items-center justify-between">
             <span>Corona Modern Vertical</span>
-            <span className="text-[#00D25B] font-mono font-medium">● v2.4 SaaS</span>
+            <span className="text-[#00D25B] font-mono font-medium">● v2.4</span>
           </div>
         )}
       </aside>

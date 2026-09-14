@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { CalendarDays, FileDown, RefreshCw } from 'lucide-react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -22,9 +22,17 @@ const PERIOD_LABELS: Record<ReportPeriod, string> = {
   monthly: 'Monthly Report'
 };
 
+const REPORT_STRUCTURE: Record<ReportPeriod, string[]> = {
+  daily: ['Work Progress', 'Manpower', 'Equipment', 'Materials', 'Safety', 'Testing & Commissioning', 'Issues'],
+  weekly: ['Progress Summary', 'Planned vs Actual', 'Resources Summary', 'Issues & Delays', 'Testing & Commissioning', 'Safety'],
+  monthly: ['Overall Progress', 'Schedule Performance', 'Cost', 'Testing & Commissioning', 'Risks/Variations', 'Safety']
+};
+
 export const ReportView: React.FC = () => {
   const { settings } = useBranding();
   const [period, setPeriod] = useState<ReportPeriod>('weekly');
+  const [selectedSiteId, setSelectedSiteId] = useState<string>('all');
+  const [selectedSite, setSelectedSite] = useState<Project | null>(null);
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [units, setUnits] = useState<ProjectUnit[]>([]);
@@ -67,6 +75,16 @@ export const ReportView: React.FC = () => {
     loadReportData();
   }, []);
 
+  // Update selectedSite when projects or selectedSiteId changes
+  useEffect(() => {
+    if (selectedSiteId !== 'all') {
+      const site = projects.find((p) => p.id === selectedSiteId) || null;
+      setSelectedSite(site);
+    } else {
+      setSelectedSite(null);
+    }
+  }, [projects, selectedSiteId]);
+
   // Period start boundary for filtering records belonging to the report window
   const getPeriodStart = (): Date => {
     const start = new Date();
@@ -89,11 +107,16 @@ export const ReportView: React.FC = () => {
       ? new Date(dateValue).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })
       : '-';
 
-  // Records updated within the reporting window
-  const periodUnits = units.filter((u) => isWithinPeriod(u.updatedAt));
-  const periodDocuments = documents.filter((d) => isWithinPeriod(d.updatedAt));
-  const periodDrawings = drawings.filter((d) => isWithinPeriod(d.updatedAt));
-  const periodActivities = activities.filter((a) => isWithinPeriod(a.timestamp));
+  // Records updated within the reporting window (filtered by selected site)
+  const filteredUnits = selectedSiteId !== 'all' ? units.filter((u) => u.siteId === selectedSiteId) : units;
+  const filteredDocuments = selectedSiteId !== 'all' ? documents.filter((d) => d.siteId === selectedSiteId) : documents;
+  const filteredDrawings = selectedSiteId !== 'all' ? drawings.filter((d) => d.siteId === selectedSiteId) : drawings;
+  const filteredActivities = selectedSiteId !== 'all' ? activities.filter((a) => a.siteId === selectedSiteId) : activities;
+
+  const periodUnits = filteredUnits.filter((u) => isWithinPeriod(u.updatedAt));
+  const periodDocuments = filteredDocuments.filter((d) => isWithinPeriod(d.updatedAt));
+  const periodDrawings = filteredDrawings.filter((d) => isWithinPeriod(d.updatedAt));
+  const periodActivities = filteredActivities.filter((a) => isWithinPeriod(a.timestamp));
 
   const periodLabel =
     period === 'daily'
@@ -105,46 +128,76 @@ export const ReportView: React.FC = () => {
   const handleDownloadPDF = () => {
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const pageWidth = doc.internal.pageSize.getWidth();
-    const company = settings?.companyName || 'ConstructPulse SaaS';
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const company = settings?.companyName || 'ConstructPulse';
 
-    // ---- Header ----
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(15);
-    doc.text(company, 14, 16);
+    // ---- Header with Company Logo ----
+    // Draw company logo if available
+    if (settings?.logoUrl) {
+      try {
+        // Add logo image (max height 18mm to fit in header)
+        doc.addImage(settings.logoUrl, 'PNG', 14, 10, 20, 14);
+        doc.setFontSize(14);
+        doc.setTextColor(30);
+        doc.text(company, 38, 18);
+      } catch (imgError) {
+        // Fallback if image fails to load
+        doc.setFontSize(15);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(0, 144, 255);
+        doc.text(company, 14, 16);
+      }
+    } else {
+      doc.setFontSize(15);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(0, 144, 255);
+      doc.text(company, 14, 16);
+    }
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(11);
-    doc.text(PERIOD_LABELS[period] + ' - Construction Summary', 14, 23);
+    doc.setTextColor(60);
+    doc.text(PERIOD_LABELS[period] + ' - Construction Summary', 14, 26);
 
-    doc.setFontSize(8);
+    doc.setFontSize(9);
     doc.setTextColor(110);
+    // Include site project in the header if a specific site is selected
+    const siteLabel = selectedSite ? selectedSite.name : 'All Sites (Consolidated)';
     doc.text(
+      'Site Project: ' + siteLabel + ' | ' +
       'Reporting Period: ' + periodLabel + ' (' + fmtDate(periodStart.toISOString()) + ' - ' + fmtDate(generatedAt.toISOString()) + ')',
       14,
-      29
+      31
     );
     doc.text(
       'Generated: ' + generatedAt.toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
       14,
-      33
+      35
     );
     doc.setTextColor(0);
     doc.setDrawColor(0, 144, 255);
     doc.setLineWidth(0.6);
-    doc.line(14, 36, pageWidth - 14, 36);
+    doc.line(14, 38, pageWidth - 14, 38);
 
     // ---- Section 1: Key Metrics ----
+    // Calculate filtered metrics (per selected site or all)
+    const filteredTotalUnits = selectedSiteId !== 'all'
+      ? filteredUnits.length
+      : units.length;
+    const filteredCompletedUnits = filteredUnits.filter((u) => u.status === 'Completed' || u.status === 'Handover').length;
+    const filteredInProgressUnits = filteredUnits.filter((u) => u.status === 'Ongoing' || u.status === 'T&C' || u.status === 'Punchlist').length;
+    const filteredProgress = filteredTotalUnits > 0 ? Math.round((filteredCompletedUnits / filteredTotalUnits) * 100) : (metrics?.overallProgress ?? 0);
+
     autoTable(doc, {
       startY: 41,
       head: [['Key Metric', 'Value', 'Key Metric', 'Value']],
       body: [
-        ['Site Projects', String(metrics?.totalProjects ?? projects.length), 'Total Units / Blocks', String(metrics?.totalUnits ?? units.length)],
-        ['Completed / Handover', String(metrics?.completedUnits ?? '-'), 'In Progress (Ongoing/T&C/Punchlist)', String(metrics?.inProgressUnits ?? '-')],
-        ['Overall Completion', (metrics?.overallProgress ?? 0) + '%', 'Total Inventory Qty', String(metrics?.totalInventory ?? inventory.length)],
+        ['Site Project', siteLabel, 'Total Units / Blocks', String(filteredTotalUnits)],
+        ['Completed / Handover', String(filteredCompletedUnits), 'In Progress (Ongoing/T&C/Punchlist)', String(filteredInProgressUnits)],
+        ['Overall Completion', filteredProgress + '%', 'Total Inventory Qty', String(metrics?.totalInventory ?? inventory.length)],
         ['Inventory Operational', String(metrics?.operationalInventory ?? '-'), 'Inventory Under Maintenance', String(metrics?.maintenanceInventory ?? '-')],
         ['Total Drawings', String(metrics?.totalDrawings ?? drawings.length), 'Approved / Handover Drawings', String(metrics?.approvedDrawings ?? '-')],
         ['Total Documents', String(metrics?.totalDocuments ?? documents.length), 'Approved / Handover Documents', String(metrics?.approvedDocuments ?? '-')],
-        ['Total Budget', (settings?.currencySymbol || '') + (metrics?.totalBudget ?? 0).toLocaleString(), 'Total Spent', (settings?.currencySymbol || '') + (metrics?.totalSpent ?? 0).toLocaleString()],
         ['Unit Updates in Period', String(periodUnits.length), 'Activity Records in Period', String(periodActivities.length)]
       ],
       theme: 'grid',
@@ -154,19 +207,42 @@ export const ReportView: React.FC = () => {
 
     let cursorY = (doc as any).lastAutoTable.finalY + 7;
 
-    // ---- Section 2: Per-Site Project Summary ----
+    // ---- Section 2: Site Project Summary ----
+    // Show only selected site or all sites
+    const displayProjects = selectedSiteId !== 'all' && selectedSite
+      ? [selectedSite]
+      : projects;
+
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(9);
-    doc.text('Site Project Summary', 14, cursorY);
+    doc.text(
+      selectedSiteId !== 'all' ? 'Site Project Details' : 'All Site Projects Summary',
+      14,
+      cursorY
+    );
     cursorY += 2;
+
+    // For daily and weekly reports, exclude budget columns
+    const isDailyOrWeekly = period === 'daily' || period === 'weekly';
 
     autoTable(doc, {
       startY: cursorY,
-      head: [['Site Project', 'Total Units', 'Completed', 'In Progress', 'Budget', 'Spent', 'Status']],
-      body: projects.map((p) => {
-        const siteUnits = units.filter((u) => u.siteId === p.id);
+      head: isDailyOrWeekly
+        ? [['Site Project', 'Total Units', 'Completed', 'In Progress', 'Status']]
+        : [['Site Project', 'Total Units', 'Completed', 'In Progress', 'Budget', 'Spent', 'Status']],
+      body: displayProjects.map((p) => {
+        const siteUnits = filteredUnits.filter((u) => u.siteId === p.id);
         const completed = siteUnits.filter((u) => u.status === 'Completed' || u.status === 'Handover').length;
         const inProgress = siteUnits.filter((u) => u.status === 'Ongoing' || u.status === 'T&C' || u.status === 'Punchlist').length;
+        if (isDailyOrWeekly) {
+          return [
+            p.name,
+            String(siteUnits.length || p.totalUnits),
+            String(completed || p.completedUnits),
+            String(inProgress),
+            p.status
+          ];
+        }
         return [
           p.name,
           String(siteUnits.length || p.totalUnits),
@@ -275,6 +351,28 @@ export const ReportView: React.FC = () => {
             <span>Download PDF Report</span>
           </button>
         </div>
+      </div>
+
+      {/* Site Project Selector */}
+      <div className="bg-[#191C24] border border-[#2A2E38] rounded-[8px] p-4 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <label className="text-[11px] text-[#8D93A1] uppercase tracking-wider block mb-1.5">Select Site Project</label>
+          <select
+            value={selectedSiteId}
+            onChange={(e) => setSelectedSiteId(e.target.value)}
+            className="bg-[#20232C] border border-[#2A2E38] text-white text-xs rounded-[4px] px-3 py-1.5 w-48 focus:outline-none focus:border-[#0090FF]"
+          >
+            <option value="all">All Sites (Consolidated)</option>
+            {projects.map((p) => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          </select>
+        </div>
+        {selectedSite && (
+          <div className="text-xs text-[#8D93A1]">
+            Generating report for: <span className="text-white font-medium">{selectedSite.name}</span>
+          </div>
+        )}
       </div>
 
       {/* Period Selector */}

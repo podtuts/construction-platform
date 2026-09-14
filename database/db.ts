@@ -197,12 +197,12 @@ export interface DatabaseState {
 const initialData: DatabaseState = {
   settings: {
     id: 'default',
-    companyName: 'ApexBuild Construction & Engineering SaaS',
+    companyName: 'ApexBuild Construction & Engineering',
     logoUrl: 'https://images.unsplash.com/photo-1541888946425-d0fbb1861593?w=128&auto=format&fit=crop&q=80',
     faviconUrl: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%230090FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>',
     loginBannerUrl: '',
     dashboardBannerUrl: '',
-    contactEmail: 'operations@apexbuild-saas.com',
+    contactEmail: 'operations@apexbuild-construction.com',
     currencySymbol: '₱',
     primaryColor: '#0090FF',
     updatedAt: new Date().toISOString()
@@ -214,7 +214,7 @@ const initialData: DatabaseState = {
       passwordHash: bcrypt.hashSync('niceday1%', 10),
       role: 'superuser',
       fullName: 'Chief Operations Administrator',
-      email: 'admin@apexbuild-saas.com',
+      email: 'admin@apexbuild-construction.com',
       avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
       createdAt: '2025-01-10T08:00:00.000Z'
     },
@@ -224,7 +224,7 @@ const initialData: DatabaseState = {
       passwordHash: bcrypt.hashSync('qwerty1%', 10),
       role: 'admin',
       fullName: 'Project Director Alex Mercer',
-      email: 'alex.mercer@apexbuild-saas.com',
+      email: 'alex.mercer@apexbuild-construction.com',
       avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
       createdAt: '2025-01-12T09:30:00.000Z'
     },
@@ -234,7 +234,7 @@ const initialData: DatabaseState = {
       passwordHash: bcrypt.hashSync('abc123%', 10),
       role: 'user',
       fullName: 'Site Engineer Sara Tan',
-      email: 'sara.tan@apexbuild-saas.com',
+      email: 'sara.tan@apexbuild-construction.com',
       avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
       createdAt: '2025-01-15T11:00:00.000Z'
     }
@@ -781,7 +781,7 @@ const initialData: DatabaseState = {
       position: 'Project Executive Director',
       idPhoto: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
       mobileNo: '+63 917 882 1940',
-      email: 'm.vance@apexbuild-saas.com',
+      email: 'm.vance@apexbuild-construction.com',
       sites: ['Oakwood Heights Subdivision', 'Horizon Grand Towers'],
       department: 'Executive Management'
     },
@@ -791,7 +791,7 @@ const initialData: DatabaseState = {
       position: 'Senior Structural Civil Engineer',
       idPhoto: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80',
       mobileNo: '+63 918 554 8219',
-      email: 'b.morales@apexbuild-saas.com',
+      email: 'b.morales@apexbuild-construction.com',
       sites: ['Oakwood Heights Subdivision', 'Pinecrest Valley Subdivision'],
       department: 'Civil Engineering'
     },
@@ -801,7 +801,7 @@ const initialData: DatabaseState = {
       position: 'Lead MEPFS / HVAC Consultant',
       idPhoto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
       mobileNo: '+63 920 331 4728',
-      email: 'd.chen@apexbuild-saas.com',
+      email: 'd.chen@apexbuild-construction.com',
       sites: ['Horizon Grand Towers', 'Apex Precision Industrial Facility'],
       department: 'Mechanical & Electrical'
     },
@@ -811,7 +811,7 @@ const initialData: DatabaseState = {
       position: 'Chief Supervising Architect',
       idPhoto: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
       mobileNo: '+63 927 662 9011',
-      email: 'n.reyes@apexbuild-saas.com',
+      email: 'n.reyes@apexbuild-construction.com',
       sites: ['Oakwood Heights Subdivision', 'Pinecrest Valley Subdivision', 'Horizon Grand Towers'],
       department: 'Architecture & Design'
     },
@@ -821,7 +821,7 @@ const initialData: DatabaseState = {
       position: 'ELV & Automation Specialist',
       idPhoto: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
       mobileNo: '+63 915 993 1244',
-      email: 'r.santos@apexbuild-saas.com',
+      email: 'r.santos@apexbuild-construction.com',
       sites: ['Oakwood Heights Subdivision', 'Apex Precision Industrial Facility'],
       department: 'ELV & Security Systems'
     },
@@ -831,7 +831,7 @@ const initialData: DatabaseState = {
       position: 'Site Quality Assurance & Safety Manager',
       idPhoto: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80',
       mobileNo: '+63 922 447 1823',
-      email: 'c.mendoza@apexbuild-saas.com',
+      email: 'c.mendoza@apexbuild-construction.com',
       sites: ['Pinecrest Valley Subdivision', 'Apex Precision Industrial Facility'],
       department: 'Health, Safety & Environment'
     }
@@ -1162,8 +1162,8 @@ const initialData: DatabaseState = {
       updatedAt: '2026-03-30'
     }
   ],
-  // Activity Logs are MANUAL daily site records only (joint site inspections,
-  // weather interruptions, deliveries, government audits, safety meetings, etc.)
+  // Site Events are MANUAL daily site records only (safety, visits,
+  // audits, weather, incidents, utilities, hauling, others)
   activities: [
     {
       id: 'act-1',

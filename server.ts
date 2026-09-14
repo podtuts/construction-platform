@@ -25,7 +25,7 @@ async function startServer() {
 
   // API Routes
   app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', time: new Date().toISOString(), service: 'ConstructPulse SaaS Web Service' });
+    res.json({ status: 'ok', time: new Date().toISOString(), service: 'ConstructPulse Construction Management Web Service' });
   });
 
   app.use('/api/auth', authRoutes);

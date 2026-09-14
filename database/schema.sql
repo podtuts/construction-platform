@@ -1,5 +1,5 @@
 -- ==========================================================
--- ConstructPulse SaaS Construction Management
+-- ConstructPulse Construction Management
 -- Supabase PostgreSQL Database Schema
 -- ==========================================================
 
@@ -9,7 +9,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- 1. App Settings (Company Branding, Name, Logo, Favicon)
 CREATE TABLE IF NOT EXISTS company_settings (
   id VARCHAR(50) PRIMARY KEY DEFAULT 'default',
-  company_name VARCHAR(255) NOT NULL DEFAULT 'ConstructPulse SaaS',
+  company_name VARCHAR(255) NOT NULL DEFAULT 'ConstructPulse',
   logo_url TEXT NOT NULL DEFAULT '',
   favicon_url TEXT NOT NULL DEFAULT '',
   primary_color VARCHAR(20) DEFAULT '#0090FF',
@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS drawings (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 9. Activity Logs Table (MANUAL recording only - daily site happenings)
+-- 9. Site Events Table (MANUAL recording only - daily site happenings)
 CREATE TABLE IF NOT EXISTS activity_logs (
   id VARCHAR(50) PRIMARY KEY,
   site_id VARCHAR(50) REFERENCES projects(id) ON DELETE SET NULL,
